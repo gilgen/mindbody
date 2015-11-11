@@ -37,6 +37,10 @@ class MindBody::Service
     end
   end
 
+  def strip_blanks(params)
+    params.reject { |_, value| value.blank? }
+  end
+
   private
 
   def client

@@ -15,11 +15,13 @@ class MindBody::ClassService < MindBody::Service
                   scheduling_window: false)
     params = {
       # 'ClassIDs': array_of_ints('2264')
-      fields: {
-        'string' => ['Classes.Resource']
-      }
+      'StartDateTime': start_date_time,
+      'EndDateTime': end_date_time,
+      # fields: {
+      #   'string' => ['Classes.Resource']
+      # }
     }
-    result = call!(:get_classes, params)
+    result = call!(:get_classes, strip_blanks(params))
     result.body.fetch(:classes, {})[:class]
   end
 
