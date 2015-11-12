@@ -14,12 +14,9 @@ class MindBody::ClassService < MindBody::Service
                   semester_ids: nil, hide_canceled_classes: false,
                   scheduling_window: false, fields: [])
     params = {
-      # 'ClassIDs': array_of_ints('2264')
       'StartDateTime': start_date_time,
       'EndDateTime': end_date_time,
-      # fields: {
-      #   'string' => ['Classes.Resource']
-      # }
+      'HideCanceledClasses': hide_canceled_classes,
     }
 
     if fields.any?
