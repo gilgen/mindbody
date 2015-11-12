@@ -12,7 +12,7 @@ class MindBody::ClassService < MindBody::Service
                   start_date_time: nil, end_date_time: nil, client_id: nil,
                   program_ids: nil, session_type_ids: nil, location_ids: nil,
                   semester_ids: nil, hide_canceled_classes: false,
-                  scheduling_window: false)
+                  scheduling_window: false, fields: [])
     params = {
       # 'ClassIDs': array_of_ints('2264')
       'StartDateTime': start_date_time,
@@ -21,6 +21,12 @@ class MindBody::ClassService < MindBody::Service
       #   'string' => ['Classes.Resource']
       # }
     }
+
+    if fields.any?
+      params['XMLDetail'] = 'Bare'
+      params[:fields!] = MindBody::Soap.to_array_of_strings(fields)
+    end
+
     result = call!(:get_classes, strip_blanks(params))
     result.body.fetch(:classes, {})[:class]
   end
