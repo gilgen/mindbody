@@ -1,8 +1,10 @@
 class MindBody::Service
+  attr_reader :client
 
   def initialize(params, service)
     @config = create_config(params)
     @service = service
+    @client = create_client("https://api.mindbodyonline.com/0_5/#{@service}.asmx")
   end
 
   protected
@@ -23,13 +25,13 @@ class MindBody::Service
     config
   end
 
-  def call(method, params = {})
+  def do_call(method, params = {})
     response = client.call(method, message: message(params))
     MindBody::Result.new(method, response)
   end
 
-  def call!(method, params = {})
-    result = call(method, params)
+  def do_call!(method, params = {})
+    result = do_call(method, params)
     if result.success?
       result
     else
@@ -43,9 +45,9 @@ class MindBody::Service
 
   private
 
-  def client
-    @client ||= Savon.client(wsdl: "https://api.mindbodyonline.com/0_5/#{@service}.asmx?WSDL",
-                             endpoint: "https://api.mindbodyonline.com/0_5/#{@service}.asmx") do |c|
+  def create_client(base_url)
+    wsdl_url = "#{base_url}?WSDL"
+    Savon.client(wsdl: wsdl_url, endpoint: base_url) do |c|
       c.convert_request_keys_to :camelcase
       c.log_level :debug
       c.log true

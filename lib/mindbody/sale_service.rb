@@ -42,51 +42,51 @@ class MindBody::SaleService < MindBody::Service
    #   }
    # }
 
-    call!(:checkout_shopping_cart, params).body
+    do_call!(:checkout_shopping_cart, params).body
   end
 
   def get_accepted_card_type
-    call!(:get_accepted_card_type)
+    do_call!(:get_accepted_card_type)
   end
 
   def get_custom_payment_methods
-    call!(:get_custom_payment_methods)
+    do_call!(:get_custom_payment_methods)
   end
 
   def get_packages(package_ids=nil, sell_online=false)
-    # call!(:get_packages, package_ids, sell_online)
+    # do_call!(:get_packages, package_ids, sell_online)
   end
 
   def get_products(product_ids=nil, search_text=nil, search_domain=nil,
                    category_ids=nil, sub_category_ids=nil, sell_online=false)
-    call!(:get_products).body
+    do_call!(:get_products).body
   end
 
   def get_sales(sale_id=nil, start_sale_date_time=DateTime.today,
                 end_sale_date_time=DateTime.today, payment_method_id=nil)
-    # call!(:get_sales, sale_id, start_sale_date_time, end_sale_date_time,
+    # do_call!(:get_sales, sale_id, start_sale_date_time, end_sale_date_time,
       # payment_method_id)
   end
 
   def get_services(location_id, program_ids=nil, session_type_ids=nil,
                    service_ids=nil, class_id=nil, class_schedule_id=nil,
                    sell_online=false, hide_related_programs=false, staff_id=nil)
-    call!(:get_services).body[:services][:service].map do |service|
+    do_call!(:get_services).body[:services][:service].map do |service|
       [service[:name], service[:id]]
     end
   end
 
   def redeem_spa_finder_wellness_card(card_id, face_amount, currency, client_id, location_id=nil)
-    # call!(:redeem_spa_finder_wellness_card, card_id, face_amount, currency,
+    # do_call!(:redeem_spa_finder_wellness_card, card_id, face_amount, currency,
       # client_id, location_id)
   end
 
   def update_products(products, test=false)
-    # call!(:update_products, products, test)
+    # do_call!(:update_products, products, test)
   end
 
   def update_services(services, test=false)
-      # call!(:update_services, services, test)
+      # do_call!(:update_services, services, test)
   end
 
   private

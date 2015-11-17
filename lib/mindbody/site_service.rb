@@ -6,7 +6,7 @@ class MindBody::SiteService < MindBody::Service
 
   def get_resource_schedule
     # <Date>dateTime</Date>
-    call!(:get_resource_schedule)
+    do_call!(:get_resource_schedule)
   end
 
   def get_resources(session_type_ids: nil, location_id: 0,
@@ -24,7 +24,7 @@ class MindBody::SiteService < MindBody::Service
       # start_date_time: start_date_time,
       # end_date_time: end_date_time
     }
-    result = call!(:get_resources, params)
+    result = do_call!(:get_resources, params)
     result.body[:resources][:resource]
   end
 
@@ -43,23 +43,23 @@ class MindBody::SiteService < MindBody::Service
       client_id: client_id,
     }
 
-    call!(:reserve_resource, args).body
+    do_call!(:reserve_resource, args).body
   end
 
   def get_activation_code
-    call!(:get_activation_code).body
+    do_call!(:get_activation_code).body
   end
 
   def get_locations
-    call!(:get_locations).body
+    do_call!(:get_locations).body.fetch(:locations, {}).fetch(:location)
   end
 
   def get_programs(schedule_type="All", online_only=false)
-    call!(:get_programs).body
+    do_call!(:get_programs).body
   end
 
   def get_relationships
-    call!(:get_relationships).body
+    do_call!(:get_relationships).body
   end
 
   def get_session_types(program_ids=nil, online_only=false)
@@ -68,7 +68,7 @@ class MindBody::SiteService < MindBody::Service
       online_only: online_only
     }
 
-    types = call!(:get_session_types, params).body[:session_types][:session_type]
+    types = do_call!(:get_session_types, params).body[:session_types][:session_type]
     types.map do |attrs|
       id = attrs.fetch(:id)
       name = attrs.fetch(:name)
@@ -78,7 +78,7 @@ class MindBody::SiteService < MindBody::Service
   end
 
   def get_sites(search_text=nil, related_site_id=nil)
-    call!(:get_sites).body
+    do_call!(:get_sites).body
   end
 
 end

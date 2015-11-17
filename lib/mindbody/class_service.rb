@@ -4,10 +4,6 @@ class MindBody::ClassService < MindBody::Service
     super(config, 'ClassService')
   end
 
-  def get_classes
-
-  end
-
   def get_classes(class_desc_ids: nil, class_ids: nil, staff_ids: nil,
                   start_date_time: nil, end_date_time: nil, client_id: nil,
                   program_ids: nil, session_type_ids: nil, location_ids: nil,
@@ -17,6 +13,7 @@ class MindBody::ClassService < MindBody::Service
       'StartDateTime': start_date_time,
       'EndDateTime': end_date_time,
       'HideCanceledClasses': hide_canceled_classes,
+      'ClientID': client_id,
     }
 
     if fields.any?
@@ -24,7 +21,7 @@ class MindBody::ClassService < MindBody::Service
       params[:fields!] = MindBody::Soap.to_array_of_strings(fields)
     end
 
-    result = call!(:get_classes, strip_blanks(params))
+    result = do_call!(:get_classes, strip_blanks(params))
     result.body.fetch(:classes, {})[:class]
   end
 
