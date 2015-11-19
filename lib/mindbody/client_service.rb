@@ -109,7 +109,7 @@ class MindBody::ClientService < MindBody::Service
       )
     end
 
-    do_call!(:get_clients, params).body
+    do_call!(:get_clients, params).body.fetch(:clients, {}).fetch(:client)
   end
 
   def get_clients_by_string(search_str)
