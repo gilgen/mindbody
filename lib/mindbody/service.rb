@@ -1,10 +1,12 @@
 class MindBody::Service
   attr_reader :client
+  attr_accessor :log, :log_level
 
-  def initialize(params, service)
+  def initialize(params, service_name)
     @config = create_config(params)
-    @service = service
-    @client = create_client("https://api.mindbodyonline.com/0_5/#{@service}.asmx")
+    @log = true
+    @log_level = :error # :debug, :info, :warn, :error, :fatal
+    @client = create_client("https://api.mindbodyonline.com/0_5/#{service_name}.asmx")
   end
 
   protected
@@ -49,8 +51,8 @@ class MindBody::Service
     wsdl_url = "#{base_url}?WSDL"
     Savon.client(wsdl: wsdl_url, endpoint: base_url) do |c|
       c.convert_request_keys_to :camelcase
-      c.log_level :debug
-      c.log true
+      c.log_level log_level
+      c.log log
     end
   end
 
