@@ -5,7 +5,7 @@ class MindBody::Service
   def initialize(params, service_name)
     @config = create_config(params)
     @log = true
-    @log_level = :error # :debug, :info, :warn, :error, :fatal
+    @log_level = :warn # :debug, :info, :warn, :error, :fatal
     @client = create_client("https://api.mindbodyonline.com/0_5/#{service_name}.asmx")
   end
 

@@ -16,13 +16,18 @@ class MindBody::ClassService < MindBody::Service
       'ClientID': client_id,
     }
 
+    if Array(class_ids).any?
+      params['ClassIDs'] = MindBody::Soap.to_array_of_ints(class_ids.map(&:to_i))
+    end
+
     if fields.any?
       params['XMLDetail'] = 'Bare'
       params[:fields!] = MindBody::Soap.to_array_of_strings(fields)
     end
 
     result = do_call!(:get_classes, strip_blanks(params))
-    result.body.fetch(:classes, {})[:class]
+    classes = result.body.fetch(:classes, {})[:class]
+    Array.wrap(classes) # single results need to be wrapped.
   end
 
 end
