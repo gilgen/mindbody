@@ -45,6 +45,16 @@ class MindBody::Service
     params.reject { |_, value| value.blank? }
   end
 
+  def to_xsd_date_time(datetime)
+    return nil if datetime.nil?
+    v = if datetime.respond_to? :utc
+      datetime.utc
+    else
+      datetime
+    end
+    v.strftime("%Y-%m-%dT%H:%M:%SZ") # "yyyy-MM-ddTHH:mm:ssZ"
+  end
+
   private
 
   def create_client(base_url)

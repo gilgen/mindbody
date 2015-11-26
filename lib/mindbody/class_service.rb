@@ -10,8 +10,8 @@ class MindBody::ClassService < MindBody::Service
                   semester_ids: nil, hide_canceled_classes: false,
                   scheduling_window: false, fields: [])
     params = {
-      'StartDateTime': start_date_time,
-      'EndDateTime': end_date_time,
+      'StartDateTime': to_xsd_date_time(start_date_time),
+      'EndDateTime': to_xsd_date_time(end_date_time),
       'HideCanceledClasses': hide_canceled_classes,
       'ClientID': client_id,
     }
