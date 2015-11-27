@@ -71,9 +71,7 @@ class MindBody::SaleService < MindBody::Service
   def get_services(location_id, program_ids=nil, session_type_ids=nil,
                    service_ids=nil, class_id=nil, class_schedule_id=nil,
                    sell_online=false, hide_related_programs=false, staff_id=nil)
-    do_call!(:get_services).body[:services][:service].map do |service|
-      [service[:name], service[:id]]
-    end
+    do_call!(:get_services).body[:services][:service]
   end
 
   def redeem_spa_finder_wellness_card(card_id, face_amount, currency, client_id, location_id=nil)
