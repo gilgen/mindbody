@@ -26,7 +26,8 @@ class MindBody::ClassService < MindBody::Service
     end
 
     result = do_call!(:get_classes, strip_blanks(params))
-    classes = result.body.fetch(:classes, {})[:class]
+    parent = result.body[:classes] || {}
+    classes = parent.fetch(:class, [])
     Array.wrap(classes) # single results need to be wrapped.
   end
 
