@@ -1,11 +1,8 @@
 class MindBody::Service
   attr_reader :client
-  attr_accessor :log, :log_level
 
   def initialize(params, service_name)
     @config = create_config(params)
-    @log = true
-    @log_level = :warn # :debug, :info, :warn, :error, :fatal
     @client = create_client("https://api.mindbodyonline.com/0_5/#{service_name}.asmx")
   end
 
@@ -21,7 +18,9 @@ class MindBody::Service
       params.fetch(:api_key),
       params.fetch(:username),
       params.fetch(:password),
-      params.fetch(:site_id)
+      params.fetch(:site_id),
+      params.fetch(:log, false),
+      params.fetch(:log_level, :error)
     )
     validate(config)
     config
@@ -61,8 +60,8 @@ class MindBody::Service
     wsdl_url = "#{base_url}?WSDL"
     Savon.client(wsdl: wsdl_url, endpoint: base_url) do |c|
       c.convert_request_keys_to :camelcase
-      c.log_level log_level
-      c.log log
+      c.log_level @config.log_level
+      c.log @config.log
     end
   end
 

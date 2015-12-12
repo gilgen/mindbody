@@ -1,4 +1,11 @@
-MindBody::Config = Struct.new(:source_name, :api_key, :username, :password, :site_id) do
+MindBody::Config = Struct.new(
+  :source_name,
+  :api_key,
+  :username,
+  :password,
+  :site_id,
+  :log,
+  :log_level) do
 
   def valid?
     # TODO this is completely wrong.

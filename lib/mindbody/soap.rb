@@ -1,11 +1,15 @@
 module MindBody::Soap
 
   def self.to_array_of_strings(list)
-    Array(list).map {|item| {'string' => item}}
+    to_array_of('string', list)
   end
 
   def self.to_array_of_ints(list)
-    Array(list).map {|item| {'int' => item}}
+    to_array_of('int', list)
+  end
+
+  def self.to_array_of(type, list)
+    Array.wrap(list).map {|item| {type => item}}
   end
 
 end
