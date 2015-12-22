@@ -26,6 +26,37 @@ class MindBody::ClassService < MindBody::Service
     end
 
     result = do_call!(:get_classes, strip_blanks(params))
+    parse_classes(result)
+  end
+
+  def add_clients_to_classes(client_ids, class_ids, require_payment: true,
+                             send_email: false, waitlist: false, test: false)
+
+    params = {
+      'ClientIDs' => to_array_of_strings(client_ids),
+      'ClassIDs' => to_array_of_ints(class_ids),
+      'RequirePayment' => require_payment,
+      'Waitlist' => waitlist,
+      'SendEmail' => send_email,
+      'Test' => test,
+    }
+
+    result = do_call!(:add_clients_to_classes, params)
+    parse_classes(result)
+  end
+
+  private
+
+  def to_array_of_strings(values)
+    MindBody::Soap.to_array_of_strings(values)
+  end
+
+  def to_array_of_ints(values)
+    ids = Array.wrap(values).map(&:to_i)
+    MindBody::Soap.to_array_of_ints(ids)
+  end
+
+  def parse_classes(result)
     parent = result.body[:classes] || {}
     classes = parent.fetch(:class, [])
     Array.wrap(classes) # single results need to be wrapped.

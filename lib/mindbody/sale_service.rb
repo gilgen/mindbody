@@ -9,10 +9,10 @@ class MindBody::SaleService < MindBody::Service
                              send_email:false, location_id:nil, image:nil,
                              image_file_name:nil)
     params = {
-      'ClientID': client_id,
-      cart_items: cart_items_hash(cart_items),
-      payments: payments_hash(payments),
-      test: test
+      'ClientID' => client_id,
+      'CartItems' => cart_items_hash(cart_items),
+      'Payments' => payments_hash(payments),
+      'Test' => test
     }
 
    #  {
@@ -115,7 +115,8 @@ class MindBody::SaleService < MindBody::Service
 
   def payments_hash(payments)
     payments.map do |payment|
-      { :payment_info => payment.merge('@xsi:type' => "tns:CreditCardInfo") }
+      type = payment.delete(:type)
+      { :payment_info => payment.merge('@xsi:type' => "tns:#{type}") }
     end
   end
 
