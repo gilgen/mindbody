@@ -4,17 +4,15 @@ class MindBody::StaffService < MindBody::Service
     super(config, 'StaffService')
   end
 
-  def get_staff(staff_ids=nil, staff_username=nil, staff_password=nil,
-                site_ids=nil, filters=nil, session_type_id=nil,
-                start_date_time=nil, location_id=nil, fields=[])
+  def get_staff(staff_ids: nil, filters: nil, session_type_id: nil,
+                start_date_time: nil, location_id: nil, fields: [])
+
     params = {
-      staff_username: staff_username,
-      staff_password: staff_password,
-      site_ids: site_ids,
-      filters: filters,
-      session_type_id: session_type_id,
-      start_date_time: start_date_time,
-      location_id: location_id,
+      'StaffIDs' => site_ids,
+      'Filters' => filters,
+      'SessionTypeID' => session_type_id,
+      'StartDateTime' => start_date_time,
+      'LocationID' => location_id,
     }
 
     if fields.any?

@@ -33,15 +33,26 @@ class MindBody::ClientService < MindBody::Service
     add_or_update_clients(update_action: 'AddNew', test: test, clients: clients)
   end
 
-  def add_credit_card_to_client(client_id, cc)
-    # do_call!(:add_credit_card_to_client, client_id, cc)
-  end
-
-  def add_new_credit_card_to_client(client_id, card_type, last_four, card_number,
-                               holder_name, exp_month, exp_year, address,
-                               city, state, postal_code)
-    # do_call!(:create_and_add_credit_card_to_client, client_id, card_type, last_four,
-      # card_number, holder_name, exp_month, exp_year, address, city, state, postal_code)
+  def add_credit_card_to_client(client_id:, card_number:, card_holder:, city:,
+                                address:, state:, postal_code:, exp_month:, exp_year:)
+    params = {
+      clients: [
+        'Client' => {
+          'ID' => client_id,
+          'ClientCreditCard' => {
+            'CardNumber' => card_number,
+            'CardHolder' => card_holder,
+            'City' => city,
+            'Address' => address,
+            'State' => state,
+            'PostalCode' => postal_code,
+            'ExpMonth' => exp_month,
+            'ExpYear' => exp_year,
+          }
+        }
+      ]
+    }
+    do_call!(:add_or_update_clients, params).body
   end
 
 
