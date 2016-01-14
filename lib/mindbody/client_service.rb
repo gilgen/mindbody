@@ -136,8 +136,16 @@ class MindBody::ClientService < MindBody::Service
     # do_call!(:get_clients_by_string, search_str)
   end
 
-  def get_client_schedule(client_id, start_date=_time.now, end_date=_time.now)
-    # do_call!(:get_client_schedule, client_id, start_date, end_date)
+  def get_client_schedule(client_id, start_date: nil, end_date: nil)
+    params = {
+      'ClientID' => client_id,
+      'StartDate' => start_date,
+      'EndDate' => end_date,
+    }
+
+    result = do_call!(:get_client_schedule, params).body
+    visits = result[:visits] || {}
+    Array.wrap visits[:visit]
   end
 
   def get_client_services(client_id:, class_id: 0, program_ids: nil,

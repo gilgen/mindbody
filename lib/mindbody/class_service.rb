@@ -10,10 +10,11 @@ class MindBody::ClassService < MindBody::Service
                   semester_ids: nil, hide_canceled_classes: false,
                   scheduling_window: false, fields: [])
     params = {
-      'StartDateTime': to_xsd_date_time(start_date_time),
-      'EndDateTime': to_xsd_date_time(end_date_time),
-      'HideCanceledClasses': hide_canceled_classes,
-      'ClientID': client_id,
+      StartDateTime: to_xsd_date_time(start_date_time),
+      EndDateTime: to_xsd_date_time(end_date_time),
+      HideCanceledClasses: hide_canceled_classes,
+      ClientID: client_id,
+      ProgramIDs: MindBody::Soap.to_array_of_ints(program_ids),
     }
 
     if Array(class_ids).any?
