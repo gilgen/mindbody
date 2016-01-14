@@ -8,7 +8,7 @@ class MindBody::StaffService < MindBody::Service
                 start_date_time: nil, location_id: nil, fields: [])
 
     params = {
-      'StaffIDs' => site_ids,
+      'StaffIDs' => staff_ids,
       'Filters' => filters,
       'SessionTypeID' => session_type_id,
       'StartDateTime' => start_date_time,
