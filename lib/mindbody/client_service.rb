@@ -29,7 +29,7 @@ class MindBody::ClientService < MindBody::Service
   end
 
   def add_client(client, test: false)
-    clients = [{ "Client": client }]
+    clients = [{ "Client" => client }]
     add_or_update_clients(update_action: 'AddNew', test: test, clients: clients)
   end
 
@@ -57,8 +57,11 @@ class MindBody::ClientService < MindBody::Service
     # do_call!(:get_active_client_memberships, client_id, location_id)
   end
 
-  def get_relative_client_account_balances(client_ids, balance_date=nil, class_id=nil)
-    # do_call!(:get_client_account_balances, client_ids, balance_date, class_id)
+  def get_client_account_balances(client_ids, balance_date=nil, class_id=nil)
+    params = {
+      'ClientIDs' => MindBody::Soap.to_array_of_strings(client_ids),
+    }
+    do_call!(:get_client_account_balances, params).body
   end
 
   def get_current_client_account_balances(client_ids, class_id=nil)
@@ -88,8 +91,14 @@ class MindBody::ClientService < MindBody::Service
     do_call!(:get_client_indexes).body
   end
 
-  def get_client_purchases(client_id, start_date=_time.now, end_date=_time.now)
-    # do_call!(:get_client_purchases, client_id, start_date, end_date)
+  def get_client_purchases(client_id, start_date:nil, end_date:nil)
+    params = {
+      'ClientID' => client_id,
+      'StartDate' => start_date,
+      'EndDate' => end_date,
+    }
+    result = do_call!(:get_client_purchases, params)
+    result.body
   end
 
   def get_client_referral_types
@@ -120,15 +129,20 @@ class MindBody::ClientService < MindBody::Service
     # do_call!(:get_client_schedule, client_id, start_date, end_date)
   end
 
-  def get_client_services(client_id, class_id=0, program_ids=nil, session_type_ids=nil,
-                        location_ids=nil, visit_count=0, start_date=nil, end_date=nil,
-                        show_active_only=false)
-    # do_call!(:get_client_services, client_id, class_id, program_ids, session_type_ids,
-      # location_ids, visit_count, start_date, end_date, show_active_only)
+  def get_client_services(client_id:, class_id: 0, program_ids: nil,
+                          session_type_ids: nil, location_ids: nil,
+                          visit_count: 0, start_date: nil, end_date: nil,
+                          show_active_only: false)
     params = {
-      'ClientID' => client_id
+      'ClientID' => client_id,
+      # 'ClassID' => class_id,
+      'ProgramIDs' => MindBody::Soap.to_array_of_ints(program_ids),
+      'SessionTypeIDs' => MindBody::Soap.to_array_of_ints(session_type_ids),
+      'ShowActiveOnly' => show_active_only,
     }
-    do_call!(:get_client_services, params).body
+    result = do_call!(:get_client_services, params)
+    wrapper = result.body[:client_services] || {}
+    Array.wrap(wrapper[:client_service])
   end
 
   def get_client_services_for_past_year(client_id, class_id=0, program_ids=nil,

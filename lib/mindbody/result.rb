@@ -24,7 +24,7 @@ class MindBody::Result
   end
 
   def body
-    @body ||= @soap_response.body.fetch(@response_key).fetch(@result_key)
+    @body ||= @soap_response.body.fetch(@response_key, {}).fetch(@result_key)
   end
 
 end

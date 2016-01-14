@@ -15,34 +15,11 @@ class MindBody::SaleService < MindBody::Service
       'Test' => test
     }
 
-   #  {
-   #    :shopping_cart => {
-   #     :id => "c74c5d0a-5958-409f-a6e4-a3511b9391e3",
-   #     :cart_items => {
-   #       :cart_item => {
-   #         :item => {
-   #           :price => "100.0000",
-   #           :online_price => "100.0000",
-   #           :tax_rate => "0",
-   #           :product_id => "1364",
-   #           :id => "1364",
-   #           :name => "10 Class Card",
-   #           :count => "10",
-   #           :"@xsi:type" => "Service"
-   #         },
-   #         :discount_amount => "0",
-   #         :id => "1",
-   #         :quantity => "1"
-   #       }
-   #     },
-   #     :sub_total => "100",
-   #     :discount_total => "0",
-   #     :tax_total => "8",
-   #     :grand_total => "108"
-   #   }
-   # }
-
-    do_call!(:checkout_shopping_cart, params).body
+    body = do_call!(:checkout_shopping_cart, params).body
+    cart = body[:shopping_cart] || {}
+    wrapper = cart[:cart_items] || {}
+    items = wrapper.fetch(:cart_item, [])
+    Array.wrap(items) # single results need to be wrapped.
   end
 
   def get_accepted_card_type
@@ -62,10 +39,12 @@ class MindBody::SaleService < MindBody::Service
     do_call!(:get_products).body
   end
 
-  def get_sales(sale_id=nil, start_sale_date_time=DateTime.today,
-                end_sale_date_time=DateTime.today, payment_method_id=nil)
-    # do_call!(:get_sales, sale_id, start_sale_date_time, end_sale_date_time,
-      # payment_method_id)
+  def get_sales(sale_id=nil, start_sale_date_time=Date.today,
+                end_sale_date_time=Date.today, payment_method_id=nil)
+    params = {
+      'SaleID' => sale_id
+    }
+    do_call!(:get_sales, params).body
   end
 
   def get_services(location_id, program_ids=nil, session_type_ids=nil,

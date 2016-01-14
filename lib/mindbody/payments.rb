@@ -1,0 +1,2 @@
+module MindBody::Payments
+end
