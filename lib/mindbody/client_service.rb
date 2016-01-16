@@ -129,7 +129,9 @@ class MindBody::ClientService < MindBody::Service
       )
     end
 
-    do_call!(:get_clients, params).body.fetch(:clients, {}).fetch(:client)
+    result = do_call!(:get_clients, params).body
+    wrapper = result[:clients] || {}
+    Array.wrap wrapper[:client]
   end
 
   def get_clients_by_string(search_str)
