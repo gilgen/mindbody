@@ -7,8 +7,10 @@ class MindBody::Payments::StoredCreditCard
   end
 
   def to_h
-    raise 'implement me'
     {
+      type: "StoredCardInfo",
+      'Amount' => @amount,
+      'LastFour' => @last_four,
     }
   end
 
