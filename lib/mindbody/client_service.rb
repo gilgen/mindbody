@@ -35,6 +35,7 @@ class MindBody::ClientService < MindBody::Service
 
   def add_credit_card_to_client(client_id:, card_number:, card_holder:, city:,
                                 address:, state:, postal_code:, exp_month:, exp_year:)
+    padded_month = exp_month.to_s.rjust(2, "0")
     params = {
       clients: [
         'Client' => {
@@ -46,7 +47,7 @@ class MindBody::ClientService < MindBody::Service
             'Address' => address,
             'State' => state,
             'PostalCode' => postal_code,
-            'ExpMonth' => exp_month,
+            'ExpMonth' => padded_month,
             'ExpYear' => exp_year,
           }
         }
