@@ -46,6 +46,20 @@ class MindBody::ClassService < MindBody::Service
     parse_classes(result)
   end
 
+  def remove_clients_from_classes(client_ids, class_ids, test: false, send_email: false, late_cancel: false)
+    params = {
+      'ClientIDs' => to_array_of_strings(client_ids),
+      'ClassIDs' => to_array_of_ints(class_ids),
+      'Test' => test,
+      'SendEmail' => send_email,
+      'LateCancel' => late_cancel,
+    }
+
+    parent = do_call!(:remove_clients_from_classes, params).body[:classes]
+    classes = parent.fetch(:class, [])
+    Array.wrap(classes)
+  end
+
   private
 
   def to_array_of_strings(values)
