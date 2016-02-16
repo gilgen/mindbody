@@ -136,7 +136,14 @@ class MindBody::ClientService < MindBody::Service
   end
 
   def get_clients_by_string(search_str)
-    # do_call!(:get_clients_by_string, search_str)
+    params = {
+      'SearchText' => search_str,
+      'Fields' => { 'string' => ['Clients.CustomClientFields'] },
+    }
+
+    result = do_call!(:get_clients, params).body
+    wrapper = result[:clients] || {}
+    Array.wrap wrapper[:client]
   end
 
   def get_client_schedule(client_id, start_date: nil, end_date: nil)

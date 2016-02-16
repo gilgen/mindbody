@@ -9,6 +9,7 @@ class MindBody::SaleService < MindBody::Service
                              send_email:false, location_id:nil, image:nil,
                              image_file_name:nil)
     params = {
+      'LocationID' => location_id,
       'ClientID' => client_id,
       'CartItems' => cart_items_hash(cart_items),
       'Payments' => payments_hash(payments),
@@ -50,7 +51,10 @@ class MindBody::SaleService < MindBody::Service
   def get_services(location_id, program_ids=nil, session_type_ids=nil,
                    service_ids=nil, class_id=nil, class_schedule_id=nil,
                    sell_online=false, hide_related_programs=false, staff_id=nil)
-    result = do_call!(:get_services)
+    params = {
+      'LocationID' => location_id
+    }
+    result = do_call!(:get_services, params)
     services = result.body[:services] || {}
     Array.wrap(services[:service])
   end
