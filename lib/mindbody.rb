@@ -5,6 +5,7 @@ end
 
 require "mindbody/version"
 require 'mindbody/api_error'
+require 'mindbody/checkout_error'
 require 'mindbody/config'
 require 'mindbody/result'
 require 'mindbody/soap'

@@ -16,11 +16,16 @@ class MindBody::SaleService < MindBody::Service
       'Test' => test
     }
 
-    body = do_call!(:checkout_shopping_cart, params).body
+    result = do_call(:checkout_shopping_cart, params)
+    body = result.body
     cart = body[:shopping_cart] || {}
-    wrapper = cart[:cart_items] || {}
-    items = wrapper.fetch(:cart_item, [])
-    Array.wrap(items) # single results need to be wrapped.
+
+    if result.success?
+      wrapper = cart[:cart_items] || {}
+      Array.wrap(wrapper[:cart_item])
+    else
+      raise MindBody::CheckoutError.new(result, cart[:messages])
+    end
   end
 
   def get_accepted_card_type
