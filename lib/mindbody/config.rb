@@ -5,7 +5,8 @@ MindBody::Config = Struct.new(
   :password,
   :site_id,
   :log,
-  :log_level) do
+  :log_level,
+  :base_url) do
 
   def valid?
     # TODO this is completely wrong.

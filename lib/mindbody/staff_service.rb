@@ -17,7 +17,7 @@ class MindBody::StaffService < MindBody::Service
 
     if fields.any?
       params['XMLDetail'] = 'Bare'
-      params[:fields!] = MindBody::Soap.to_array_of_strings(fields)
+      params[:'Fields!'] = {"string" => fields}
     end
 
     result = do_call!(:get_staff, params)

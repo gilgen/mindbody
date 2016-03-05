@@ -1,9 +1,12 @@
 class MindBody::Service
+  cattr_accessor :base_url
+  PRODUCTION_URL = "https://api.mindbodyonline.com/0_5".freeze
+
   attr_reader :client
 
   def initialize(params, service_name)
     @config = create_config(params)
-    @client = create_client("https://api.mindbodyonline.com/0_5/#{service_name}.asmx")
+    @client = create_client(service_name)
   end
 
   protected
@@ -20,7 +23,8 @@ class MindBody::Service
       params.fetch(:password),
       params.fetch(:site_id),
       params.fetch(:log, false),
-      params.fetch(:log_level, :error)
+      params.fetch(:log_level, :error),
+      params.fetch(:base_url, PRODUCTION_URL)
     )
     validate(config)
     config
@@ -56,9 +60,11 @@ class MindBody::Service
 
   private
 
-  def create_client(base_url)
-    wsdl_url = "#{base_url}?WSDL"
-    Savon.client(wsdl: wsdl_url, endpoint: base_url) do |c|
+  def create_client(service_name)
+    endpoint_url = "#{@config.base_url}/#{service_name}.asmx"
+    wsdl_url = "#{endpoint_url}?WSDL"
+
+    Savon.client(wsdl: wsdl_url, endpoint: endpoint_url) do |c|
       c.convert_request_keys_to :camelcase
       c.log_level @config.log_level
       c.log @config.log

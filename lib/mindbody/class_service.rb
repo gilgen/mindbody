@@ -34,8 +34,8 @@ class MindBody::ClassService < MindBody::Service
                              send_email: false, waitlist: false, test: false)
 
     params = {
-      'ClientIDs' => to_array_of_strings(client_ids),
-      'ClassIDs' => to_array_of_ints(class_ids),
+      :'ClientIDs!' => {"string" => client_ids},
+      :'ClassIDs!' => {"int" => class_ids},
       'RequirePayment' => require_payment,
       'Waitlist' => waitlist,
       'SendEmail' => send_email,
