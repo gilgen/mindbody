@@ -14,8 +14,7 @@ class MindBody::ClassService < MindBody::Service
       EndDateTime: to_xsd_date_time(end_date_time),
       HideCanceledClasses: hide_canceled_classes,
       ClientID: client_id,
-      :'ProgramIDs!' => {"int" => program_ids},
-      :'LocationIDs!' => {"int" => location_ids},
+      ProgramIDs: MindBody::Soap.to_array_of_ints(program_ids),
     }
 
     if Array(class_ids).any?
