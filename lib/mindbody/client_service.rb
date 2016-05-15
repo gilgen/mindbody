@@ -33,6 +33,11 @@ class MindBody::ClientService < MindBody::Service
     add_or_update_clients(update_action: 'AddNew', test: test, clients: clients)
   end
 
+  def update_client(client, test: false)
+    clients = [{ "Client" => client }]
+    add_or_update_clients(update_action: 'Fail', test: test, clients: clients)
+  end
+
   def add_credit_card_to_client(client_id:, card_number:, card_holder:, city:,
                                 address:, state:, postal_code:, exp_month:, exp_year:)
     padded_month = exp_month.to_s.rjust(2, "0")
@@ -55,7 +60,6 @@ class MindBody::ClientService < MindBody::Service
     }
     do_call!(:add_or_update_clients, params).body
   end
-
 
   def update_contact_log_text(client_id, text)
     # do_call!(:update_contact_log_text, client_id, text)
