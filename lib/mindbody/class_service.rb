@@ -31,7 +31,8 @@ class MindBody::ClassService < MindBody::Service
   end
 
   def add_clients_to_classes(client_ids, class_ids, require_payment: true,
-                             send_email: false, waitlist: false, test: false)
+                             send_email: false, waitlist: false, test: false,
+                             client_service_id: nil)
 
     params = {
       :'ClientIDs!' => {"string" => client_ids},
@@ -40,6 +41,7 @@ class MindBody::ClassService < MindBody::Service
       'Waitlist' => waitlist,
       'SendEmail' => send_email,
       'Test' => test,
+      'ClientServiceID' => client_service_id
     }
 
     result = do_call!(:add_clients_to_classes, params)
